@@ -3,7 +3,7 @@
         <div class="mainButtons">
             <menu-button @click="switchCreateMode" :text="'Create'"/>
             <menu-button :text="'Edit'"/>
-            <menu-button :text="'Clear'"/>
+            <menu-button @click="handleClearButton" :text="'Clear'"/>
         </div>
         <div v-if="createMode" class="createButtons">
             <menu-icon-button @click="changeShapeMode('rectangle')" :img="'./img/rectangle.svg'"/>
@@ -32,6 +32,9 @@ export default {
         },
         changeShapeMode(value){
             this.$emit('changeShape', value);
+        },
+        handleClearButton(){
+            this.$emit('clear');
         }
     }
 }
