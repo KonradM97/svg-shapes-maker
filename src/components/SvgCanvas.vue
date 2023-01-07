@@ -20,7 +20,8 @@ export default {
     currentMode: {
       default: 'Create',
       type: String,
-    }
+    },
+    color: String,
   },
   components: {
     SvgPoints,
@@ -47,7 +48,7 @@ export default {
     createShape(coordinates){
       this.points.push(new Points(this.currentId))
       this.addPointToCurrentPointsArray(coordinates);
-      this.shapes.push(new Shape(this.currentId, this.points[this.currentId], this.currentShape));
+      this.shapes.push(new Shape(this.currentId, this.points[this.currentId], this.currentShape, this.color));
     },
 
     mousedownEvent(mouse){

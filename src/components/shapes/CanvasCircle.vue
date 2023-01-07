@@ -1,5 +1,5 @@
 <template>
-    <circle :cx="circle.cx" :cy="circle.cy" :r="circle.diameter" fill="blue"/>
+    <circle :cx="circle.cx" :cy="circle.cy" :r="circle.diameter" :fill="circle.fill"/>
 </template>
 <script>
 
@@ -16,6 +16,9 @@ export default {
 
     },
     watch: {
+    },
+    created(){
+        console.log(this.circle)
     }
 }
 </script>

@@ -1,8 +1,8 @@
 import Shape from "./Shape";
 
 export default class Rectangle extends Shape{
-    constructor(id, points, fill = "black"){
-        super(id, points, fill);
+    constructor(id, points,type, fill){
+        super(id, points, type, fill);
         this._pointsLimit = 4;
     }
 

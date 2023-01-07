@@ -1,5 +1,5 @@
 <template>
-    <rect :x="rectangle.p1.x" :y="rectangle.p1.y" :width="rectangle.width" :height="rectangle.height" fill="yellow"/>
+    <rect :x="rectangle.p1.x" :y="rectangle.p1.y" :width="rectangle.width" :height="rectangle.height" :fill="rectangle.fill"/>
 </template>
 <script>
 

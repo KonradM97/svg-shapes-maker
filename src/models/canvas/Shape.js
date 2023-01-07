@@ -4,7 +4,7 @@ export default class Shape{
     constructor(id, points, type, fill){
         this._id = id;
         this._points = points? points : new Points(this.id);
-        this._fill = fill? fill : 'black';
+        this._fill = fill;
         this._pointsLimit = 0;
         this._type = type? type : ShapeType.RECTANGLE;
     }

@@ -1,13 +1,20 @@
 <template>
   <div id="shapesMaker">
-    <SvgCanvas :currentShape="currentShape" class="windowComponent"/>
+    <SvgCanvas 
+    :currentShape="currentShape"
+    :color="color"
+     class="windowComponent"/>
     <div class="windowComponent right-window">
-      <button :class="switchButton" @click="switchMenu">{{switchButtonMessage}}</button>
+      <button
+      :class="switchButton"
+       @click="switchMenu"
+       >{{switchButtonMessage}}</button>
       <CanvasMenu 
       :createMode="rectangleCreateMode" 
       v-show="menuShowed" 
       @changeShape="changeShape" 
       @clear="clearHandler"
+      @colorChange="colorChangeHandler"
       class="windowComponent canvasMenu"/>
     </div>
   </div>
@@ -29,6 +36,7 @@ export default {
       switchButton: 'switch-button--open',
       switchButtonMessage: 'Hide menu',
       currentShape: 'null',
+      color: 'rgba(0,0,0,1)',
     }
   },
   methods:{
@@ -45,8 +53,9 @@ export default {
     changeShape(value){
       this.currentShape = value;
     },
-    clearHandler(){
-      
+    colorChangeHandler(value){
+      console.log(value)
+      this.color = value;
     }
   },
 }

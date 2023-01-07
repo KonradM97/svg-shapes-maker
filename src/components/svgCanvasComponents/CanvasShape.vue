@@ -28,11 +28,11 @@ export default {
     },
     created(){
         switch(this.shape.type){
-            case ShapeType.RECTANGLE: 
-                this.rectangle = new Rectangle(this.shape.id, this.shape.points);
+            case ShapeType.RECTANGLE:
+                this.rectangle = new Rectangle(this.shape.id, this.shape.points,ShapeType.RECTANGLE, this.shape.fill);
                 break;
             case ShapeType.CIRCLE:
-                this.circle = new Circle(this.shape.id, this.shape.points);
+                this.circle = new Circle(this.shape.id, this.shape.points,ShapeType.CIRCLE, this.shape.fill);
         }
     },
     methods: {
