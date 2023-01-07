@@ -6,8 +6,8 @@
             <menu-button @click="handleClearButton" :text="'Clear'"/>
         </div>
         <div v-if="createMode" class="createButtons">
-            <menu-icon-button @click="changeShapeMode('rectangle')" :img="'./img/rectangle.svg'"/>
-            <menu-icon-button :img="'./img/circle.svg'"/>
+            <menu-icon-button @click="changeShapeMode(shapeType.RECTANGLE)" :img="'./img/rectangle.svg'"/>
+            <menu-icon-button @click="changeShapeMode(shapeType.CIRCLE)" :img="'./img/circle.svg'"/>
             <menu-icon-button :img="'./img/polygon.svg'"/>
         </div>
     </div>
@@ -15,6 +15,7 @@
 <script>
 import menuButton from './svgMenuComponents/MenuButton.vue'
 import menuIconButton from './svgMenuComponents/MenuIconButton.vue'
+import ShapeType from "../models/ShapeType"
 
 export default {
   components: { 
@@ -24,6 +25,7 @@ export default {
     data() {
         return {
             createMode: false,
+            shapeType: ShapeType,
         }
     },
     methods: {

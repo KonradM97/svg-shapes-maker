@@ -1,17 +1,17 @@
 <template>
   <circle
-    v-for="point in points.pointArray"
+    v-for="point in pointsArray.pointArray"
     :key="point.index"
     :cx="point.x"
     :cy="point.y"
-    :r="getDiameter()"
+    :r="4"
   />
 </template>
 <script>
 export default {
   name: "SvgPoints",
   props: {
-    fetchedPoints: Object,
+    pointsArray: Object,
   },
   data() {
     return {
@@ -23,14 +23,6 @@ export default {
     setPoints(points) {
       this.points = points;
     },
-
-    getDiameter(){
-    if(Object.keys(this.points).length === 0){
-        return 0;
-    } else {
-        return this.points.getDiameter();
-    }
-  }
   },
 
   created() {

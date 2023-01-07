@@ -3,7 +3,12 @@
     <SvgCanvas :currentShape="currentShape" class="windowComponent"/>
     <div class="windowComponent right-window">
       <button :class="switchButton" @click="switchMenu">{{switchButtonMessage}}</button>
-      <CanvasMenu :createMode="rectangleCreateMode" v-show="menuShowed" @changeShape="changeShape" class="windowComponent canvasMenu"/>
+      <CanvasMenu 
+      :createMode="rectangleCreateMode" 
+      v-show="menuShowed" 
+      @changeShape="changeShape" 
+      @clear="clearHandler"
+      class="windowComponent canvasMenu"/>
     </div>
   </div>
 </template>
@@ -40,6 +45,9 @@ export default {
     changeShape(value){
       this.currentShape = value;
     },
+    clearHandler(){
+      
+    }
   },
 }
 </script>

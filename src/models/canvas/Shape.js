@@ -1,11 +1,12 @@
 import Points from "../Points";
-
+import ShapeType from "../ShapeType";
 export default class Shape{
-    constructor(id, points, fill){
+    constructor(id, points, type, fill){
         this._id = id;
         this._points = points? points : new Points(this.id);
         this._fill = fill? fill : 'black';
         this._pointsLimit = 0;
+        this._type = type? type : ShapeType.RECTANGLE;
     }
 
     set id(value){
@@ -22,6 +23,10 @@ export default class Shape{
 
     get points(){
         return this._points;
+    }
+
+    get type(){
+        return this._type;
     }
 
     set fill(value){

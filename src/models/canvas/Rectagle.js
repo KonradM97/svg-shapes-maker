@@ -3,18 +3,22 @@ import Shape from "./Shape";
 export default class Rectangle extends Shape{
     constructor(id, points, fill = "black"){
         super(id, points, fill);
-        this._pointsLimit = 2;
+        this._pointsLimit = 4;
     }
 
     chooseFirstPoint(){
-        let x = (this.points.pointArray[0].x < this.points.pointArray[1].x)? this.points.pointArray[0].x : this.points.pointArray[1].x;
-        let y = (this.points.pointArray[0].y < this.points.pointArray[1].y)? this.points.pointArray[0].y : this.points.pointArray[1].y;
+        let xArray = this.points.pointArray.map(x => x.x);
+        let x = Math.min.apply(Math, xArray);
+        let yArray = this.points.pointArray.map(y => y.y);
+        let y = Math.min.apply(Math, yArray);
         return {x: x, y: y};
     }
 
     chooseLastPoint(){
-        let x = (this.points.pointArray[0].x > this.points.pointArray[1].x)? this.points.pointArray[0].x : this.points.pointArray[1].x;
-        let y = (this.points.pointArray[0].y > this.points.pointArray[1].y)? this.points.pointArray[0].y : this.points.pointArray[1].y;
+        let xArray = this.points.pointArray.map(x => x.x);
+        let x = Math.max.apply(Math, xArray);
+        let yArray = this.points.pointArray.map(y => y.y);
+        let y = Math.max.apply(Math, yArray);
         return {x: x, y: y};
     }
 
@@ -27,11 +31,12 @@ export default class Rectangle extends Shape{
     }
 
     get p1(){
-        if(this.points.pointArray[0]!= undefined && this.points.pointArray[0]== undefined){
-            return this.points.pointArray[0];
-        } else if(this.points.pointArray[0]!= undefined && this.points.pointArray[0] != undefined){
+        if(this.points.pointArray[1]){
             return this.chooseFirstPoint();
         }
+        else if(this.points.pointArray[0]!= undefined){
+            return this.points.pointArray[0];
+        } 
         return {x: 0, y: 0};
     }
 

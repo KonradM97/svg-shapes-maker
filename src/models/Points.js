@@ -9,16 +9,12 @@ export default class Points {
     }
 
     addPoint(x, y) {
-        this.getPointArray().push(new Point(this.numberOfPoints, x, y));
+        this.pointArray.push(new Point(this.numberOfPoints, x, y));
         this.numberOfPoints++;
     }
 
     getDiameter(){
         return this.diameter;
-    }
-
-    getPointArray(){
-        return this.pointArray;
     }
 
     get pointArrayLength(){

@@ -1,80 +1,105 @@
 <template>
   <div class="canvas">
     <svg @mousedown="mousedownEvent" @mouseup="mouseupEvent" @mousemove="mousemoveEvent">
-      <SvgPoints :fetchedPoints="points"/>
-      <CanvasRectangles @incrementId="incrementId" :addPoint="addRectPoint" :currentId="currentId" :rectangleCreateMode="rectangleCreateMode" />
+      <CanvasShape v-for="shape in shapes" :key="shape.id" :shape="shape"/>
+      <SvgPoints v-for="pointsArray in points" :key="pointsArray.id" :pointsArray="pointsArray"/>
     </svg>
   </div>
 </template>
 <script>
 import SvgPoints from './SvgPoints.vue';
 import Points from "../models/Points";
-import CanvasRectangles from "./shapes/CanvasRectangles.vue"
+import CanvasShape from "./svgCanvasComponents/CanvasShape.vue"
+import Shape from '../models/canvas/Shape';
+import ShapeType from '../models/ShapeType';
 
 export default {
   name: "SvgCanvas",
   props: {
     currentShape: String,
+    currentMode: {
+      default: 'Create',
+      type: String,
+    }
   },
   components: {
     SvgPoints,
-    CanvasRectangles,
+    CanvasShape,
   },
   data(){
     return {
       currentId: 0,
       createMode: false,
-      points: {},
+      points: [],
       rectangleCreateMode: false,
-      addRectPoint: {},
+      shapes: [],
+      notFirstMouseMove: false,
     }
   },
   created(){
-    this.points = new Points(0);
+
   },
   methods: {
+    addPointToCurrentPointsArray(coordinates){
+      this.points[this.currentId].addPoint(coordinates.x,coordinates.y)
+    },
+
+    createShape(coordinates){
+      this.points.push(new Points(this.currentId))
+      this.addPointToCurrentPointsArray(coordinates);
+      this.shapes.push(new Shape(this.currentId, this.points[this.currentId], this.currentShape));
+    },
+
     mousedownEvent(mouse){
       this.createMode = true;
       let coordinates = this.adjustCoordinates(mouse);
-      if(this.rectangleCreateMode){
-        this.currentId++;
-        this.addRectPoint = coordinates;
-      }
+      this.createShape(coordinates);
     },
 
     mouseupEvent(){
-      this.createMode = false;
+      if(this.createMode)
+      {
+        this.currentId++;
+        this.createMode = false;
+        this.notFirstMouseMove = false;
+      }
     },
 
     mousemoveEvent(mouse){
-      let coordinates = this.adjustCoordinates(mouse);
       if(this.createMode){
-        if(this.rectangleCreateMode){
-          this.addRectPoint = coordinates;
+        let coordinates = this.adjustCoordinates(mouse);
+        if(this.notFirstMouseMove === false){
+          this.handleFirstMouseMove(coordinates);
+        } else {
+          this.handleUpdateMouseMove(coordinates);
         }
       }
     },
 
+    handleFirstMouseMove(coordinates){
+      switch(this.shapes[this.currentId].type){
+        case ShapeType.RECTANGLE:
+        case ShapeType.CIRCLE:
+          this.addPointToCurrentPointsArray(coordinates);
+          break; 
+        
+      }
+      this.notFirstMouseMove = true;
+    },
+    handleUpdateMouseMove(coordinates){
+      switch(this.shapes[this.currentId].type){
+        case ShapeType.RECTANGLE:
+        case ShapeType.CIRCLE:
+            this.points[this.currentId].setLastPoint(coordinates.x,coordinates.y);
+          break; 
+      }
+    },
     adjustCoordinates(mouse){
       return {x: mouse.pageX-10, y: mouse.pageY-10}
     },
-    
-    handleChangeShape(currentShape){
-      switch(currentShape){
-        case 'rectangle':
-          this.rectangleCreateMode = true;
-          break;
-      }
-    },
 
-    incrementId(){
-      this.currentId++;
-    }
   },
   watch: {
-    currentShape: function(){
-      this.handleChangeShape(this.currentShape);
-    },
   },
 };
 </script>
