@@ -1,24 +1,25 @@
 <template>
   <div class="canvas">
     <svg @mousedown="mousedownEvent" @mouseup="mouseupEvent" @mousemove="mousemoveEvent">
-      <CanvasShape v-for="shape in shapes" :key="shape.id" :shape="shape"/>
+      <CanvasShape @shapeMouseMove="shapeMouseMoveHandler" v-for="shape in shapes" :key="shape.id" :shape="shape"/>
       <SvgPoints v-for="pointsArray in points" :key="pointsArray.id" :pointsArray="pointsArray"/>
     </svg>
   </div>
 </template>
 <script>
-import SvgPoints from './SvgPoints.vue';
-import Points from "../models/Points";
 import CanvasShape from "./svgCanvasComponents/CanvasShape.vue"
+import ModeTypes from '../models/ModeTypes';
+import Points from "../models/Points";
 import Shape from '../models/canvas/Shape';
 import ShapeType from '../models/ShapeType';
+import SvgPoints from './SvgPoints.vue';
 
 export default {
   name: "SvgCanvas",
   props: {
     currentShape: String,
     currentMode: {
-      default: 'Create',
+      default: ModeTypes.CREATE,
       type: String,
     },
     color: String,
@@ -33,6 +34,7 @@ export default {
       createMode: false,
       points: [],
       rectangleCreateMode: false,
+      selectedShapeId: 0,
       shapes: [],
       notFirstMouseMove: false,
     }
@@ -41,20 +43,45 @@ export default {
 
   },
   methods: {
+    
     addPointToCurrentPointsArray(coordinates){
-      this.points[this.currentId].addPoint(coordinates.x,coordinates.y)
+      this.points[this.points.length-1].addPoint(coordinates.x,coordinates.y)
+    },
+
+    adjustCoordinates(mouse){
+      return {x: mouse.pageX-10, y: mouse.pageY-10}
     },
 
     createShape(coordinates){
       this.points.push(new Points(this.currentId))
       this.addPointToCurrentPointsArray(coordinates);
-      this.shapes.push(new Shape(this.currentId, this.points[this.currentId], this.currentShape, this.color));
+      this.shapes.push(new Shape(this.currentId, this.points[this.points.length-1], this.currentShape, this.color));
     },
 
     mousedownEvent(mouse){
+      switch(this.currentMode){
+        case ModeTypes.CREATE:
+          this.mousedownCreateHandler(mouse);
+          break;
+        case ModeTypes.CLEAR:
+          this.mousedownClearHandler();
+          break;
+      } 
+    },
+
+    mousedownCreateHandler(mouse){
       this.createMode = true;
       let coordinates = this.adjustCoordinates(mouse);
       this.createShape(coordinates);
+    },
+
+    mousedownClearHandler(){
+      this.shapes = this.shapes.filter(obj => {
+        return obj.id !== this.selectedShapeId;
+      });
+      this.points = this.points.filter(obj => {
+        return obj.id !== this.selectedShapeId;
+      });
     },
 
     mouseupEvent(){
@@ -78,7 +105,8 @@ export default {
     },
 
     handleFirstMouseMove(coordinates){
-      switch(this.shapes[this.currentId].type){
+      console.log(this.shapes)
+      switch(this.shapes[this.shapes.length-1].type){
         case ShapeType.RECTANGLE:
         case ShapeType.CIRCLE:
           this.addPointToCurrentPointsArray(coordinates);
@@ -88,19 +116,24 @@ export default {
       this.notFirstMouseMove = true;
     },
     handleUpdateMouseMove(coordinates){
-      switch(this.shapes[this.currentId].type){
+      switch(this.shapes[this.shapes.length-1].type){
         case ShapeType.RECTANGLE:
         case ShapeType.CIRCLE:
-            this.points[this.currentId].setLastPoint(coordinates.x,coordinates.y);
+            this.points[this.shapes.length-1].setLastPoint(coordinates.x,coordinates.y);
           break; 
       }
     },
-    adjustCoordinates(mouse){
-      return {x: mouse.pageX-10, y: mouse.pageY-10}
+
+    shapeMouseMoveHandler(id){
+      this.selectedShapeId = id;
     },
 
   },
   watch: {
+    currentMode(){
+      console.log(this.currentMode);
+      console.log(this.createMode)
+    }
   },
 };
 </script>

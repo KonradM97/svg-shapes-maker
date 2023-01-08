@@ -5,7 +5,7 @@
             <menu-button :text="'Edit'"/>
             <menu-button @click="handleClearButton" :text="'Clear'"/>
         </div>
-        <div v-if="createMode" class="createButtons">
+        <div v-if="currentMode == modeTypes.CREATE" class="createButtons">
             <menu-icon-button @click="changeShapeMode(shapeType.RECTANGLE)" :img="'./img/rectangle.svg'"/>
             <menu-icon-button @click="changeShapeMode(shapeType.CIRCLE)" :img="'./img/circle.svg'"/>
             <menu-icon-button :img="'./img/polygon.svg'"/>
@@ -25,6 +25,7 @@
 import menuButton from './svgMenuComponents/MenuButton.vue'
 import menuIconButton from './svgMenuComponents/MenuIconButton.vue'
 import ShapeType from "../models/ShapeType"
+import ModeTypes from "../models/ModeTypes"
 
 export default {
   components: { 
@@ -33,7 +34,8 @@ export default {
     },
     data() {
         return {
-            createMode: false,
+            currentMode: ModeTypes.CREATE,
+            modeTypes: ModeTypes,
             shapeType: ShapeType,
             red: 100,
             green: 120,
@@ -43,12 +45,14 @@ export default {
     },
     methods: {
         switchCreateMode(){
-            this.createMode ^= true;
+            this.currentMode = ModeTypes.CREATE;
+            this.$emit('createMode');
         },
         changeShapeMode(value){
             this.$emit('changeShape', value);
         },
         handleClearButton(){
+            this.currentMode = ModeTypes.CLEAR;
             this.$emit('clear');
         }
     },

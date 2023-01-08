@@ -1,6 +1,7 @@
 <template>
   <div id="shapesMaker">
     <SvgCanvas 
+    :currentMode="currentMode"
     :currentShape="currentShape"
     :color="color"
      class="windowComponent"/>
@@ -11,7 +12,8 @@
        >{{switchButtonMessage}}</button>
       <CanvasMenu 
       :createMode="rectangleCreateMode" 
-      v-show="menuShowed" 
+      v-show="menuShowed"
+      @createMode="createModeHandler"
       @changeShape="changeShape" 
       @clear="clearHandler"
       @colorChange="colorChangeHandler"
@@ -23,6 +25,8 @@
 <script>
 import SvgCanvas from './SvgCanvas.vue'
 import CanvasMenu from './CanvasMenu.vue'
+import ModeTypes from '../models/ModeTypes'
+import ShapeType from "../models/ShapeType"
 
 export default {
   name: 'SvgShapesMaker',
@@ -35,7 +39,8 @@ export default {
       menuShowed: true,
       switchButton: 'switch-button--open',
       switchButtonMessage: 'Hide menu',
-      currentShape: 'null',
+      currentMode: ModeTypes.CREATE,
+      currentShape: ShapeType.RECTANGLE,
       color: 'rgba(0,0,0,1)',
     }
   },
@@ -51,10 +56,16 @@ export default {
       this.menuShowed ^= true;
     },
     changeShape(value){
+      console.log(value)
       this.currentShape = value;
     },
+    clearHandler(){
+      this.currentMode = ModeTypes.CLEAR;
+    },
+    createModeHandler(){
+       this.currentMode = ModeTypes.CREATE;
+    },
     colorChangeHandler(value){
-      console.log(value)
       this.color = value;
     }
   },

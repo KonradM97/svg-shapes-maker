@@ -18,7 +18,6 @@ export default {
     watch: {
     },
     created(){
-        console.log(this.circle)
     }
 }
 </script>

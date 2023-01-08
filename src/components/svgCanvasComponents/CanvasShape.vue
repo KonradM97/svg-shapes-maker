@@ -1,6 +1,6 @@
 <template>
-    <CanvasRectangle :rectangle="rectangle" v-if="shape.type === shapeType.RECTANGLE" />
-    <CanvasCircle :circle="circle" v-if="shape.type === shapeType.CIRCLE" />
+    <CanvasRectangle @mouseover="mouseoverEventHandler" :rectangle="rectangle" v-if="shape.type === shapeType.RECTANGLE" />
+    <CanvasCircle @mouseover="mouseoverEventHandler" :circle="circle" v-if="shape.type === shapeType.CIRCLE" />
 </template>
 
 <script>
@@ -36,6 +36,9 @@ export default {
         }
     },
     methods: {
+        mouseoverEventHandler(){
+            this.$emit('shapeMouseMove', this.shape.id);
+        }
     },
     watch: {
 
